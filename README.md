@@ -10,6 +10,6 @@
 - [API to place an order](https://ancient-badlands-93061.herokuapp.com/order)
 - [API to get list of place an order](https://ancient-badlands-93061.herokuapp.com/order)
 
-## 💻 Tech stack:
+## 💻 Tech stacks:
 - NodeJS
 - MongoDB
