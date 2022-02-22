@@ -39,35 +39,40 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const query = await db.productsdatacollection.find({});
-  const result = await query.toArray();
-  let allProductsArray = [];
-  let allProducts = {};
-  for (let value of result) {
-    if (!value) {
-      return;
-    } else {
-      const query = { _id: ObjectId(value.category_id) };
-      const result = await db.categorydatacollection.findOne(query);
-      const catergoryName = result.category_name;
-      const productName = value.name;
-      const productDescription = value.description;
-      const productPrice = value.price;
-      allProducts = {
-        catergoryName,
-        productName,
-        productDescription,
-        productPrice,
-      };
-      allProductsArray.push(allProducts);
+  try {
+    const query = await db.productsdatacollection.find({});
+    const result = await query.toArray();
+    let allProductsArray = [];
+    let allProducts = {};
+    for (let value of result) {
+      if (!value) {
+        return;
+      } else {
+        const query = { _id: ObjectId(value.category_id) };
+        const result = await db.categorydatacollection.findOne(query);
+        const catergoryName = result.category_name;
+        const productName = value.name;
+        const productDescription = value.description;
+        const productPrice = value.price;
+        allProducts = {
+          catergoryName,
+          productName,
+          productDescription,
+          productPrice,
+        };
+        allProductsArray.push(allProducts);
 
-      console.log("category_name:", catergoryName);
-      console.log("name:", productName);
-      console.log("description", productDescription);
-      console.log("price:", productPrice);
+        console.log("category_name:", catergoryName);
+        console.log("name:", productName);
+        console.log("description:", productDescription);
+        console.log("price:", productPrice);
+      }
     }
+    res.send(allProductsArray);
+  } catch (error) {
+    console.log(error.message);
+    res.send({ data: error.message });
   }
-  res.send(allProductsArray);
 });
 
 module.exports = router;
