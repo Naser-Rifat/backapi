@@ -4,7 +4,7 @@
 - [API for registration](https://ancient-badlands-93061.herokuapp.com/registration)
 - [API for login](https://ancient-badlands-93061.herokuapp.com/login)
 - [API for insert product category](https://ancient-badlands-93061.herokuapp.com/category)
-- [API for get category list](https://ancient-badlands-93061.herokuapp.com/)
+- [API for get category list](https://ancient-badlands-93061.herokuapp.com/category)
 - [API for insert product](https://ancient-badlands-93061.herokuapp.com/product)
 - [API to get all product](https://ancient-badlands-93061.herokuapp.com/product)
 - [API to place an order](https://ancient-badlands-93061.herokuapp.com/order)
