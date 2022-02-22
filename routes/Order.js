@@ -4,35 +4,40 @@ const ObjectId = require("mongodb").ObjectId;
 const db = require("../mongodb");
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
-  const orderInfo = req.body;
-  const user_id = orderInfo.user_id;
-  const product_id = orderInfo.product_id;
-  const userIDfilter = { _id: ObjectId(user_id) };
-  const userIDresult = await db.registrationdatacollection.findOne(
-    userIDfilter
-  );
-  const productIDfilter = { _id: ObjectId(product_id) };
-  const productIDresult = await db.productsdatacollection.findOne(
-    productIDfilter
-  );
-  if (userIDresult && productIDresult) {
-    const ordersdata = {
-      user_id,
-      product_id,
-    };
+  try {
+    console.log(req.body);
+    const orderInfo = req.body;
+    const user_id = orderInfo.user_id;
+    const product_id = orderInfo.product_id;
+    const userIDfilter = { _id: ObjectId(user_id) };
+    const userIDresult = await db.registrationdatacollection.findOne(
+      userIDfilter
+    );
+    const productIDfilter = { _id: ObjectId(product_id) };
+    const productIDresult = await db.productsdatacollection.findOne(
+      productIDfilter
+    );
+    if (userIDresult && productIDresult) {
+      const ordersdata = {
+        user_id,
+        product_id,
+      };
 
-    const result = await db.ordersdatacollection.insertOne(ordersdata);
+      const result = await db.ordersdatacollection.insertOne(ordersdata);
 
-    if (result.acknowledged == true) {
-      console.log("Inserted Successfully");
-      res.json({ data: "Inserted Successfully" });
+      if (result.acknowledged == true) {
+        console.log("Inserted Successfully");
+        res.json({ data: "Inserted Successfully" });
+      } else {
+        console.log("error with this code");
+        res.json({ data: "Error with this code" });
+      }
     } else {
-      console.log("error with this code");
-      res.json({ data: "Error with this code" });
+      res.json({ data: "No data found" });
     }
-  } else {
-    res.json({ data: "No data found" });
+  } catch (error) {
+    console.log(error.message);
+    res.send({ data: error.message });
   }
 });
 
