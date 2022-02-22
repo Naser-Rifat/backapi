@@ -41,29 +41,32 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  const userID = { user_id: id };
+router.get("/", async (req, res) => {
+  try {
+    let placeOrdersInfo = [];
+    const find = await db.ordersdatacollection.find({});
+    const result = await find.toArray();
+    for (const value of result) {
+      const user_query = { _id: ObjectId(value.user_id) };
+      const userInfo = await db.registrationdatacollection.findOne(user_query);
+      const product_query = { _id: ObjectId(value.product_id) };
+      const productInfo = await db.productsdatacollection.findOne(
+        product_query
+      );
 
-  let placeOrdersInfo = [];
-  const userIDInfo = await db.ordersdatacollection.find(userID);
-  const userResult = await userIDInfo.toArray();
-  for (const value of userResult) {
-    const user_query = { _id: ObjectId(value.user_id) };
-    const userInfo = await db.registrationdatacollection.findOne(user_query);
-    console.log(userInfo);
-    const product_query = { _id: ObjectId(value.product_id) };
-    const productInfo = await db.productsdatacollection.findOne(product_query);
-    console.log(productInfo);
+      const placeOrdersData = {
+        username: userInfo.name,
+        productname: productInfo.name,
+        productprice: productInfo.price,
+      };
 
-    const placeOrdersData = {
-      username: userInfo.name,
-      productname: productInfo.name,
-      productprice: productInfo.price,
-    };
-    placeOrdersInfo.push(placeOrdersData);
+      placeOrdersInfo.push(placeOrdersData);
+    }
+    res.json(placeOrdersInfo);
+  } catch (error) {
+    console.log(error.message);
+    res.send({ data: error.message });
   }
-  res.json(placeOrdersInfo);
 });
 
 module.exports = router;
